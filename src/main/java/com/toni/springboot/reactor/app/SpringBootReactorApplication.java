@@ -1,5 +1,8 @@
 package com.toni.springboot.reactor.app;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -22,7 +25,16 @@ public class SpringBootReactorApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Flux<String> nombres = Flux.just("Gonzalo Fulano","Toni Fulano","Maria Vulcano","Alba Vulcana","Manolo Willis","Jose Willis","Manolo Sánchez");
+		List<String> usuariosList = new ArrayList<>();
+		usuariosList.add("Gonzalo Fulano");
+		usuariosList.add("Toni Fulano");
+		usuariosList.add("Maria Vulcana");
+		usuariosList.add("Alba Vulcana");
+		usuariosList.add("Manolo Willis");
+		usuariosList.add("Bruce Willis");
+		
+		Flux<String> nombres = Flux.fromIterable(usuariosList);		
+//		Flux<String> nombres = Flux.just("Gonzalo Fulano","Toni Fulano","Maria Vulcano","Alba Vulcana","Manolo Willis","Jose Willis","Manolo Sánchez");
 				
 		//sin asignarlo a la variable usuarios no se subscribe a usuarios. pintaría todos los nombres
 		Flux<Usuario> usuarios = nombres.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
