@@ -22,21 +22,23 @@ public class SpringBootReactorApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Flux<Usuario> nombres = Flux.just("Gonzalo Fulano","Toni Fulano","Maria Vulcano","Alba Vulcana","Manolo Willis","Jose Willis","Manolo Sánchez")
-				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
-				.filter(usuario -> usuario.getNombre().toLowerCase().equals("manolo"))
+		Flux<String> nombres = Flux.just("Gonzalo Fulano","Toni Fulano","Maria Vulcano","Alba Vulcana","Manolo Willis","Jose Willis","Manolo Sánchez");
+				
+		//sin asignarlo a la variable usuarios no se subscribe a usuarios. pintaría todos los nombres
+		Flux<Usuario> usuarios = nombres.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
+			.filter(usuario -> usuario.getNombre().toLowerCase().equals("manolo"))
 //				.doOnNext(System.out::println);
-				.doOnNext(usuario -> {
-					if (usuario == null) {
-						throw new RuntimeException("Nombres no pueden ser vacíos");
-					}
-					System.out.println(usuario.getNombre().concat(" ").concat(usuario.getApellidos()));					
-				})
-				.map(usuario -> {
-					String nombre = usuario.getNombre().toLowerCase();
-					usuario.setNombre(nombre);
-					return usuario;
-					});
+			.doOnNext(usuario -> {
+				if (usuario == null) {
+					throw new RuntimeException("Nombres no pueden ser vacíos");
+				}
+				System.out.println(usuario.getNombre().concat(" ").concat(usuario.getApellidos()));					
+			})
+			.map(usuario -> {
+				String nombre = usuario.getNombre().toLowerCase();
+				usuario.setNombre(nombre);
+				return usuario;
+				});
 		
 		
 //		nombres.subscribe(log::info);
